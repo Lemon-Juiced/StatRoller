@@ -18,34 +18,42 @@ import java.util.concurrent.CountDownLatch;
 public class StatrollerApplication implements ApplicationListener<WebServerInitializedEvent> {
 
 	private static ConfigurableApplicationContext context;
-	private static final CountDownLatch latch = new CountDownLatch(1);
+	private static int port;
 
 	/**
-	 * The main method for the Statroller application, which does two things:
-	 *
-	 * 1. Runs the Spring Boot application.
-	 * 2. Close the application right after it starts.
-	 *
-	 * Since the application is a web application, it will run indefinitely until closed.
+	 * The main method for the Statroller application.
+	 * Runs the Spring Boot application.
 	 *
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		// Run the Spring Boot application
-		SpringApplication.run(StatrollerApplication.class, args);
+		context = SpringApplication.run(StatrollerApplication.class, args);
+		shutdown();
 	}
 
+	/**
+	 * Sets the port variable to the port the application is running on.
+	 *
+	 * @param event the event that the application is running
+	 */
 	@Override
 	public void onApplicationEvent(WebServerInitializedEvent event) {
-		int port = event.getWebServer().getPort();
-		openBrowser("http://localhost:" + port + "/index.html");
-		try {
-			latch.await(); // Wait until countdown latch reaches zero
-		} catch (InterruptedException e) {
-			Thread.currentThread().interrupt();
-			e.printStackTrace();
-		} finally {
-			shutdown(); // Shutdown application after browser is opened
+		port = event.getWebServer().getPort();
+	}
+
+	/**
+	 * Opens the default web browser to the index page of the application.
+	 * Then shuts down the Spring Boot application after a delay.
+	 */
+	public static void shutdown() {
+		if (context != null) {
+			openBrowser("http://localhost:" + port + "/index.html");
+			try {
+				Thread.sleep(10000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			SpringApplication.exit(context, () -> 0);
 		}
 	}
 
@@ -55,7 +63,7 @@ public class StatrollerApplication implements ApplicationListener<WebServerIniti
 	 *
 	 * @param url the URL to open in the browser
 	 */
-	private void openBrowser(String url) {
+	private static void openBrowser(String url) {
 		String os = System.getProperty("os.name").toLowerCase();
 		Runtime runtime = Runtime.getRuntime();
 		try {
@@ -70,15 +78,6 @@ public class StatrollerApplication implements ApplicationListener<WebServerIniti
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * Gracefully shuts down the application.
-	 */
-	public static void shutdown() {
-		if (context != null) {
-			context.close();
 		}
 	}
 }
