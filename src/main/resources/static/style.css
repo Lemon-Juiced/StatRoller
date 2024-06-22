@@ -1,0 +1,72 @@
+/* Reset Default Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Background Text and Color */
+body {
+    background-color: #1a1a1a;
+    color: #ffffff;
+}
+
+/* Font Style */
+body {
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+}
+
+/* Link Styles */
+a {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Header Styles */
+h1, h2, h3, h4, h5, h6 {
+    color: #ffffff;
+    font-weight: bold;
+    padding: 10px; 
+}
+
+
+/* Paragraph Style */
+p {
+    line-height: 1.5;
+}
+
+/* Button Style */
+button {
+    background-color: #333333;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #555555;
+}
+
+/* Input Style */
+input[type="text"], input[type="email"], input[type="password"] {
+    background-color: #333333;
+    color: #ffffff;
+    border: none;
+    padding: 10px;
+}
+
+input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus {
+    outline: none;
+    background-color: #555555;
+}
+
+/* Set section styles */
+.section {
+    margin-bottom: 40px;
+}
