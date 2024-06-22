@@ -1,3 +1,3 @@
 # Stat Roller
 
-D&D Stat Roller Application Using Java & Spring Boot alonside HTML, CSS, and JavaScript
+D&D Stat Roller Application Using Java & Spring Boot alongside HTML, CSS, and JavaScript
