@@ -82,15 +82,15 @@ function rollDropLowest(n, x, y, z) {
  */
 function roll() {
     // Grab the scores from the HTML elements.
-    let n = document.getElementById("roll").value;
-    let x = document.getElementById("sides").value;
-    let y = document.getElementById("drop").value;
+    let n = parseInt(document.getElementById("roll").value);
+    let x = parseInt(document.getElementById("sides").value);
+    let y = parseInt(document.getElementById("drop").value);
     let z = document.getElementById("reroll").checked;
 
     let scores = [];
 
     for (let i = 0; i < 6; i++) {
-        scores.push(rollDropLowest(4, 6, 1, true));
+        scores.push(rollDropLowest(n, x, y, z));
     }
 
     // Sort the scores in descending order.
@@ -101,119 +101,104 @@ function roll() {
     // Set the state of the classes.
     setClassState();
 
-    // Each class impacts the order of the ability scores. They will apply a +2 to one of the scores and potentially +1 to one or several others.
-    // The highest score will get the highest result of the dice roll and the lowest score will get the lowest result of the dice roll.
-    // If there is a tie, the score first in the order will be chosen first
-    let str = 0;
-    let dex = 0;
-    let con = 0;
-    let int = 0;
-    let wis = 0;
-    let cha = 0;
+    let abilities = [
+        {name: 'str', value: 0},
+        {name: 'dex', value: 0},
+        {name: 'con', value: 0},
+        {name: 'int', value: 0},
+        {name: 'wis', value: 0},
+        {name: 'cha', value: 0}
+    ];
 
     if (artificer) {
-        int += 2;
-        dex += 1;
-        con += 1;
+        abilities.find(a => a.name === 'int').value += 2;
+        abilities.find(a => a.name === 'dex').value += 1;
+        abilities.find(a => a.name === 'con').value += 1;
     }
     if (barbarian) {
-        str += 2;
-        con += 1;
+        abilities.find(a => a.name === 'str').value += 2;
+        abilities.find(a => a.name === 'con').value += 1;
     }
     if (bard) {
-        cha += 2;
-        dex += 1;
+        abilities.find(a => a.name === 'cha').value += 2;
+        abilities.find(a => a.name === 'dex').value += 1;
     }
     if (cleric) {
-        wis += 2;
-        str += 1;
-        con += 1;
+        abilities.find(a => a.name === 'wis').value += 2;
+        abilities.find(a => a.name === 'str').value += 1;
+        abilities.find(a => a.name === 'con').value += 1;
     }
     if (druid) {
-        wis += 2;
-        con += 1;
+        abilities.find(a => a.name === 'wis').value += 2;
+        abilities.find(a => a.name === 'con').value += 1;
     }
     if (fighter) {
-        str += 2;
-        if(!fighter_e_knight) con += 1;
+        abilities.find(a => a.name === 'str').value += 2;
+        if(!fighter_e_knight) abilities.find(a => a.name === 'con').value += 1;
     }
     if (fighter_dex) {
-        dex += 2;
-        if(!fighter_e_knight) con += 1;
+        abilities.find(a => a.name === 'dex').value += 2;
+        if(!fighter_e_knight) abilities.find(a => a.name === 'con').value += 1;
     }
     if (fighter_e_knight) {
-        int + 1;
+        abilities.find(a => a.name === 'int').value += 1;
     }
     if (monk) {
-        dex += 2;
-        wis += 1;
+        abilities.find(a => a.name === 'dex').value += 2;
+        abilities.find(a => a.name === 'wis').value += 1;
     }
     if (paladin) {
-        str += 2;
-        cha += 1;
+        abilities.find(a => a.name === 'str').value += 2;
+        abilities.find(a => a.name === 'cha').value += 1;
     }
     if (ranger) {
-        dex += 2;
-        wis += 1;
+        abilities.find(a => a.name === 'dex').value += 2;
+        abilities.find(a => a.name === 'wis').value += 1;
     }
     if (ranger_str) {
-        str += 2;
-        wis += 1;
+        abilities.find(a => a.name === 'str').value += 2;
+        abilities.find(a => a.name === 'wis').value += 1;
     }
     if (rogue) {
-        dex += 2;
-        if(!rogue_a_trickster) cha += 1;
+        abilities.find(a => a.name === 'dex').value += 2;
+        if(!rogue_a_trickster) abilities.find(a => a.name === 'cha').value += 1;
     }
     if (rogue_a_trickster) {
-        int += 1;
+        abilities.find(a => a.name === 'int').value += 1;
     }
     if (sorcerer) {
-        cha += 2;
-        con += 1;
+        abilities.find(a => a.name === 'cha').value += 2;
+        abilities.find(a => a.name === 'con').value += 1;
     }
     if (warlock) {
-        cha += 2;
-        con += 1;
+        abilities.find(a => a.name === 'cha').value += 2;
+        abilities.find(a => a.name === 'con').value += 1;
     }
     if (wizard) {
-        int += 2;
+        abilities.find(a => a.name === 'int').value += 2;
         if(!wizard_enchantment) {
-        dex += 1;
-        con += 1;
+            abilities.find(a => a.name === 'dex').value += 1;
+            abilities.find(a => a.name === 'con').value += 1;
         }
     }
     if (wizard_enchantment) {
-        cha += 1;
+        abilities.find(a => a.name === 'cha').value += 1;
     }
 
-    // Order the scores based on the classes selected.
-    // The ability with the highest scores will have highest sums of the dice rolls added to their column.
-    // The order is STR, DEX, CON, INT, WIS, CHA.
-    let orderedScores = [];
+    // Sort the abilities based on their values in descending order
+    abilities.sort(function(a, b) {
+        return b.value - a.value;
+    });
 
-    for (let i = 0; i < 6; i++) {
-        if (str === Math.max(str, dex, con, int, wis, cha)) {
-            orderedScores.push(scores.shift() + str);
-        } else if (dex === Math.max(str, dex, con, int, wis, cha)) {
-            orderedScores.push(scores.shift() + dex);
-        } else if (con === Math.max(str, dex, con, int, wis, cha)) {
-            orderedScores.push(scores.shift() + con);
-        } else if (int === Math.max(str, dex, con, int, wis, cha)) {
-            orderedScores.push(scores.shift() + int);
-        } else if (wis === Math.max(str, dex, con, int, wis, cha)) {
-            orderedScores.push(scores.shift() + wis);
-        } else if (cha === Math.max(str, dex, con, int, wis, cha)) {
-            orderedScores.push(scores.shift() + cha);
-        }
+    // Assign the scores to the abilities based on the order
+    for (let i = 0; i < abilities.length; i++) {
+        abilities[i].score = scores[i];
     }
 
     // Display the results in the HTML.
-    document.getElementById("str").innerHTML = orderedScores[0] + " (" + getModifier(orderedScores[0]) + ")";
-    document.getElementById("dex").innerHTML = orderedScores[1] + " (" + getModifier(orderedScores[1]) + ")";
-    document.getElementById("con").innerHTML = orderedScores[2] + " (" + getModifier(orderedScores[2]) + ")";
-    document.getElementById("int").innerHTML = orderedScores[3] + " (" + getModifier(orderedScores[3]) + ")";
-    document.getElementById("wis").innerHTML = orderedScores[4] + " (" + getModifier(orderedScores[4]) + ")";
-    document.getElementById("cha").innerHTML = orderedScores[5] + " (" + getModifier(orderedScores[5]) + ")";
+    for (let i = 0; i < abilities.length; i++) {
+        document.getElementById(abilities[i].name).innerHTML = abilities[i].score + " (" + getModifier(abilities[i].score) + ")";
+    }
 }
 
 /**
