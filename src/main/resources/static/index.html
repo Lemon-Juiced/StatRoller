@@ -7,8 +7,26 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="styles.css">
+        <script src="scripts.js" defer></script>
     </head>
     <body>
-        <div style="text-align: center;"><h1>Stats Roller v2024.0</h1></div>
+        <h1>Stats Roller v2024.0</h1>
+        <div class="flex-container">
+            <!--
+            This section needs to be split into two halves.
+            The left half will contain preset buttons for rolling stats.
+            The right half will contain the actual formula for the rolls and the roll button.
+            -->
+            <div>
+                <h2>Presets</h2>
+                <button onclick="insertPreset(3, 6, 0)">3d6</button><br>
+                <button onclick="insertPreset(4, 6, 1)">4d6 drop the lowest</button>
+            </div>
+            <div>
+                <h2>Roll</h2>
+                Roll: <input type="number" id="roll" value="4"> d <input type="number" id="sides" value="6"> drop the lowest <input type="number" id="drop" value="1"><br>
+                <button onclick="roll()">Roll</button>
+            </div>
+        </div>
     </body>
 </html>
