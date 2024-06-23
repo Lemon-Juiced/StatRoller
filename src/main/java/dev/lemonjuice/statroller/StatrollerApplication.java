@@ -7,7 +7,6 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.ConfigurableApplicationContext;
 
 import java.io.IOException;
-import java.util.concurrent.CountDownLatch;
 
 /**
  * The main file for the Statroller application using Spring Boot.
