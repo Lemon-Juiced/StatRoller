@@ -208,12 +208,24 @@ function roll() {
     }
 
     // Display the results in the HTML.
-    document.getElementById("str").innerHTML = orderedScores[0];
-    document.getElementById("dex").innerHTML = orderedScores[1];
-    document.getElementById("con").innerHTML = orderedScores[2];
-    document.getElementById("int").innerHTML = orderedScores[3];
-    document.getElementById("wis").innerHTML = orderedScores[4];
-    document.getElementById("cha").innerHTML = orderedScores[5];
+    document.getElementById("str").innerHTML = orderedScores[0] + " (" + getModifier(orderedScores[0]) + ")";
+    document.getElementById("dex").innerHTML = orderedScores[1] + " (" + getModifier(orderedScores[1]) + ")";
+    document.getElementById("con").innerHTML = orderedScores[2] + " (" + getModifier(orderedScores[2]) + ")";
+    document.getElementById("int").innerHTML = orderedScores[3] + " (" + getModifier(orderedScores[3]) + ")";
+    document.getElementById("wis").innerHTML = orderedScores[4] + " (" + getModifier(orderedScores[4]) + ")";
+    document.getElementById("cha").innerHTML = orderedScores[5] + " (" + getModifier(orderedScores[5]) + ")";
+}
+
+/**
+ * Gets the modifier for an ability score.
+ * If the score is positive we have to add the '+' symbol
+ *
+ * @param score - The ability score.
+ * @returns The modifier for the ability score.
+ */
+function getModifier(score) {
+    let modifier = Math.floor((score - 10) / 2);
+    return modifier >= 0 ? "+" + modifier : modifier;
 }
 
 /**
