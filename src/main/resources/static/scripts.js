@@ -185,6 +185,14 @@ function roll() {
         abilities.find(a => a.name === 'cha').value += 1;
     }
 
+    // A final optimization is that Strength and Intelligence are dump stats in 5e, so if their scores are 0, we can assign them another -1 to prioritize the other abilities.
+    if (abilities.find(a => a.name === 'str').value === 0) {
+        abilities.find(a => a.name === 'str').value -= 1;
+    }
+    if (abilities.find(a => a.name === 'int').value === 0) {
+        abilities.find(a => a.name === 'int').value -= 1;
+    }
+
     // Sort the abilities based on their values in descending order
     abilities.sort(function(a, b) {
         return b.value - a.value;
