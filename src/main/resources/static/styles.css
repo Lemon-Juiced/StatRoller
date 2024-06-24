@@ -31,7 +31,7 @@ a:hover {
 h1, h2, h3, h4, h5, h6 {
     color: #ffffff;
     font-weight: bold;
-    padding: 10px; 
+    padding: 10px 0px;
 }
 
 h1 {
@@ -79,16 +79,19 @@ input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focu
 /* Flex Box */
 .flex-container {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     max-width: 800px;
     margin: 0 auto;
 }
+
 .flex-container > div:first-child {
     text-align: right;
+    margin-right: 20px;
 }
 
 .flex-container > div:last-child {
     text-align: left;
+    margin-left: 20px;
 }
 
 /* Set section styles */
